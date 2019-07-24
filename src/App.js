@@ -7,7 +7,7 @@ import "./Animations.scss";
 class App extends Component {
 	state = {
 		isStarted: false,
-		questions: ["Here's my question", "Here's another question"],
+		questions: ["How's your prayer life?", "How's the state of your heart?"],
 		currentIndex: 0,
 	};
 
