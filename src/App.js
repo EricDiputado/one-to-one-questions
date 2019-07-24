@@ -29,6 +29,7 @@ class App extends Component {
 									.match(/<ol(.)+>\n((.)+\n)+<\/ol>/g)
 									.join()
 									.replace(/<\/?(.)+>\n?/g, "")
+									.replace(/&#39;/g, "'")
 									.split(/\n/g)
 							: e.target.result
 									.match(/QUESTIONS\\n(.)+\?/g)
