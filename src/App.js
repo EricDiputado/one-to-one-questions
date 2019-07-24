@@ -21,7 +21,6 @@ class App extends Component {
 				var reader = new FileReader();
 				reader.readAsText(request.response);
 				reader.onload = e => {
-					// console.log(e.target.result);
 					this.setState({
 						questions: this.isMobile()
 							? e.target.result
@@ -45,7 +44,6 @@ class App extends Component {
 	}
 
 	render() {
-		console.log(this.state.questions);
 		const fontSize = "5vh";
 		return (
 			<Container fluid className="vh-100" style={{ backgroundColor: "rgb(35,58,61" }}>
