@@ -12,6 +12,7 @@ class App extends Component {
 			questions: [],
 			currentIndex: 0,
 		};
+		this.isMobile = () => window.innerWidth <= 1200;
 
 		(request => {
 			request.open("GET", "https://docs.google.com/document/d/1CjiR97piLL1sX-RDEW4XZpfOM9j8dpGPZLJSt8bbsuk/edit", true);
@@ -20,13 +21,22 @@ class App extends Component {
 				var reader = new FileReader();
 				reader.readAsText(request.response);
 				reader.onload = e => {
+					// console.log(e.target.result);
 					this.setState({
-						questions: e.target.result
-							.match(/QUESTIONS\\n(.)+\?/g)
-							.join()
-							.replace(/\\u0027/g, "'")
-							.split(/\\n/g)
-							.splice(1),
+						questions: this.isMobile()
+							? e.target.result
+									.replace(/>([^\n])/g, ">\n$1")
+									.replace(/([^\n])</g, "$1\n<")
+									.match(/<ol(.)+>\n((.)+\n)+<\/ol>/g)
+									.join()
+									.replace(/<\/?(.)+>\n?/g, "")
+									.split(/\n/g)
+							: e.target.result
+									.match(/QUESTIONS\\n(.)+\?/g)
+									.join()
+									.replace(/\\u0027/g, "'")
+									.split(/\\n/g)
+									.splice(1),
 					});
 				};
 			};
@@ -35,6 +45,7 @@ class App extends Component {
 	}
 
 	render() {
+		console.log(this.state.questions);
 		const fontSize = "5vh";
 		return (
 			<Container fluid className="vh-100" style={{ backgroundColor: "rgb(35,58,61" }}>
