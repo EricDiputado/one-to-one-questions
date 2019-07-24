@@ -7,11 +7,36 @@ import "./Animations.scss";
 class App extends Component {
 	state = {
 		isStarted: false,
-		questions: ["How's your prayer life?", "How's the state of your heart?"],
+		questions: (() => {
+			const questions = [];
+			var request = new XMLHttpRequest();
+			request.open("GET", "https://docs.google.com/document/d/1CjiR97piLL1sX-RDEW4XZpfOM9j8dpGPZLJSt8bbsuk/edit", true);
+			request.responseType = "blob";
+			request.onload = () => {
+				var reader = new FileReader();
+				reader.readAsText(request.response);
+				reader.onload = e => {
+					console.log(
+						"DataURL:",
+						questions.push(
+							...e.target.result
+								.match(/QUESTIONS\\n(.)+\?/g)
+								.join()
+								.replace(/\\u0027/g, "'")
+								.split(/\\n/g)
+								.splice(1),
+						),
+					);
+				};
+			};
+			request.send();
+			return questions;
+		})(),
 		currentIndex: 0,
 	};
 
 	render() {
+		console.log(this.state.questions);
 		const fontSize = "5vh";
 		return (
 			<Container fluid className="vh-100" style={{ backgroundColor: "rgb(35,58,61" }}>
@@ -35,7 +60,7 @@ class App extends Component {
 							<Col xs="12" className={this.state.isStarted ? "fade-out" : ""} style={{ fontSize: fontSize, color: "rgb(200,200,200)" }}>
 								Press Logo to Start
 							</Col>
-							<Col xs="auto" className={`${this.state.isStarted ? "fade-in-delayed" : "invisible"}`} style={{ marginTop: "40vh" }}>
+							<Col xs="auto" className={`${this.state.isStarted ? "fade-in-delayed" : "d-none"}`} style={{ marginTop: "40vh" }}>
 								<div style={{ width: "10vh", height: "10vh" }}>
 									<img
 										src={Logo}
