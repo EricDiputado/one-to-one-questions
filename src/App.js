@@ -31,6 +31,7 @@ class App extends Component {
 									.replace(/<\/?(.)+>\n?/g, "")
 									.replace(/&#39;/g, "'")
 									.split(/\n/g)
+									.filter(question => question !== "")
 							: e.target.result
 									.match(/QUESTIONS\\n(.)+\?/g)
 									.join()
